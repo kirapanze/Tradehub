@@ -1,3 +1,4 @@
+import product from "./models/product.js";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -8,6 +9,17 @@ dotenv.config();
 
 // Create our web server application.
 const app = express();
+app.get("/api/products", async (req,res) =>
+
+{
+  try{const products = await product.find({active:true});
+res.json(products);
+}
+catch(error){
+  console.error("product query failed:",error.message);
+  res.status(500).json({error:"could not loads products"});
+}
+});
 app.use(cors({ origin: process.env.CLIENT_ORIGIN }));
 app.use(express.json());
 
