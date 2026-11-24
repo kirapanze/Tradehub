@@ -1,19 +1,33 @@
 import { useEffect, useState } from "react";
+import ProductCard from "./components/ProductCard.jsx";
 
-function App() {
-  const [message, setMessage] = useState("Checking API...");
+export default function App() {
+  const [products, setProducts] = useState([]);
+  const [message, setMessage] = useState("Loading products...");
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/health`)
-      .then(response => response.json())
-      .then(data => setMessage(`API status: ${data.status}; DB: ${data.database}`))
-      .catch(error => setMessage(`Request failed: ${error.message}`));
+    fetch(`${import.meta.env.VITE_API_URL}/api/products`)
+      .then((response) => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+      })
+      .then((data) => {
+        setProducts(data);
+        setMessage(data.length ? "" : "No products available yet.");
+      })
+      .catch((error) => setMessage(error.message));
   }, []);
 
-  return <main style={{ padding: 32 }}>
-    <h1>TradeHub</h1>
-    <p>Connecting Korean products and African importers.</p>
-    <p>{message}</p>
-  </main>;
+  return (
+    <main className="container">
+      <h1>Korea-Africa TradeHub</h1>
+      <p>Demo Korean products for African buyers.</p>
+      {message && <p role="status">{message}</p>}
+      <section className="product-grid">
+        {products.map((product) => (
+          <ProductCard key={product._id} product={product} />
+        ))}
+      </section>
+    </main>
+  );
 }
-export default App;

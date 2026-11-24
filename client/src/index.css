@@ -52,6 +52,10 @@
 
 body {
   margin: 0;
+body { font-family: Arial, sans-serif; background: #f6f8fb; color: #192233; }
+.container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+.product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.product-card { background: white; padding: 18px; border: 1px solid #dde4ec; border-radius: 12px; }
 }
 
 #root {
